@@ -14,6 +14,6 @@ public class DeviceServiceImpl implements DeviceService{
     private DeviceDbService deviceDbService;
     @Override
     public List<Device> getAllDevice() {
-        return List.of();
+        return deviceDbService.getAll();
     }
 }

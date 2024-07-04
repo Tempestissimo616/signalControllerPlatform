@@ -2,6 +2,7 @@ package com.phoenix.signal.controller.platform.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,13 +10,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@Schema(description = "产品注册请求")
 public class ProductRequest {
 
     @NotBlank(message = "产品名称不能为空")
     @Schema(description = "产品名称")
     private String productName;
 
-    @NotBlank(message = "产品ID不能为空")
+    @NotNull(message = "产品ID不能为空")
     @Schema(description = "产品ID")
     private Long productId;
 
@@ -31,7 +33,7 @@ public class ProductRequest {
     @Schema(description = "功能类别")
     private String productType;
 
-    @NotBlank(message = "产品数量不能为空")
+    @NotNull(message = "产品数量不能为空")
     @Schema(description = "产品数量")
     private Integer productNum;
 }

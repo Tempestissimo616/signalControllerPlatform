@@ -25,11 +25,14 @@ public class OriginalProductServiceImpl implements OriginalProductService{
     }
 
     @Override
-    public Boolean create(ProductRequest productRequest) {
+    public String create(ProductRequest productRequest) {
         checkDuplicatedProduct(productRequest.getProductId());
         OriginalProduct originalProduct = modelMapper.map(productRequest, OriginalProduct.class);
+        if(originalProductDbService.save(originalProduct)){
+            return productRequest.getProductName() + "添加成功";
+        }
 
-        return originalProductDbService.save(originalProduct);
+        return productRequest.getProductName() + "添加失败";
     }
 
     private void checkDuplicatedProduct(Long productId){

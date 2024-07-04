@@ -8,5 +8,5 @@ import java.util.List;
 public interface OriginalProductService {
     List<OriginalProduct> getAllOriginalProduct();
 
-    Boolean create(ProductRequest productRequest);
+    String create(ProductRequest productRequest);
 }
