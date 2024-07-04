@@ -2,6 +2,7 @@ package com.phoenix.signal.controller.platform.service;
 
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
+import com.phoenix.signal.controller.platform.dto.request.ProductRequest;
 import com.phoenix.signal.controller.platform.mapper.OriginalProductMapper;
 import com.phoenix.signal.controller.platform.model.OriginalProduct;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,11 @@ public class OriginalProductDbServiceImpl extends MPJBaseServiceImpl<OriginalPro
     }
 
     @Override
-    public List<OriginalProduct> page(Integer pageNum, Integer pageSize) {
-        return List.of();
+    public Long countByProductId(Long productId) {
+
+        MPJLambdaWrapper<OriginalProduct> wrapper = new MPJLambdaWrapper<OriginalProduct>()
+                .eq(OriginalProduct::getProductId, productId);
+
+        return originalProductMapper.selectCount(wrapper);
     }
 }
