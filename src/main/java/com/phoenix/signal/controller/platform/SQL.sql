@@ -1,6 +1,6 @@
 CREATE TABLE t_original_product (
     product_name VARCHAR(255) NOT NULL,
-    product_id BIGINT NOT NULL UNIQUE,
+    product_id BIGINT NOT NULL PRIMARY KEY,
     product_brand VARCHAR(255) NOT NULL,
     producer VARCHAR(255) NOT NULL,
     product_type VARCHAR(255) NOT NULL,
@@ -17,4 +17,4 @@ CREATE TABLE t_device (
     product_model VARCHAR(255) NOT NULL,
     status TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0:离线, 1:在线',
     intersection_id BIGINT NOT NULL
-    )engine=innodb;
+    )engine=innodb auto_increment=1;

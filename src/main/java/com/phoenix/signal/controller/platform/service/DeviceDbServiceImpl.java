@@ -18,4 +18,9 @@ public class DeviceDbServiceImpl extends MPJBaseServiceImpl<DeviceMapper, Device
     public List<Device> getAll() {
         return deviceMapper.selectList(new MPJLambdaWrapper<Device>().selectAll(Device.class));
     }
+
+    @Override
+    public Long countByProductId(Long deviceId) {
+        return deviceMapper.selectCount(new MPJLambdaWrapper<Device>().eq(Device::getDeviceId, deviceId));
+    }
 }

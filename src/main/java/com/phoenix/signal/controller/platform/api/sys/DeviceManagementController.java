@@ -2,6 +2,7 @@ package com.phoenix.signal.controller.platform.api.sys;
 
 import com.phoenix.signal.controller.platform.business.DeviceService;
 import com.phoenix.signal.controller.platform.business.OriginalProductService;
+import com.phoenix.signal.controller.platform.dto.request.DeviceRequest;
 import com.phoenix.signal.controller.platform.dto.request.ProductRequest;
 import com.phoenix.signal.controller.platform.model.Device;
 import com.phoenix.signal.controller.platform.model.OriginalProduct;
@@ -14,10 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,7 +45,7 @@ public class DeviceManagementController {
             @ApiResponse(responseCode = "201", description = "CREATED")
     )
     @PostMapping("/product/create")
-    public ResponseEntity<String> create(ProductRequest productRequest){
+    public ResponseEntity<String> createProduct(@RequestBody ProductRequest productRequest){
         return new ResponseEntity<>(originalProductService.create(productRequest), HttpStatus.CREATED);
     }
 
@@ -60,5 +58,15 @@ public class DeviceManagementController {
     @GetMapping("/device/get-all")
     public ResponseEntity<List<Device>> getAllDevice() {
         return ResponseEntity.ok(deviceService.getAllDevice());
+    }
+
+    @Tag(name = "设备表")
+    @Operation(summary = "设备注册")
+    @ApiResponses(
+            @ApiResponse(responseCode = "201", description = "CREATED")
+    )
+    @PostMapping("/device/create")
+    public ResponseEntity<String> createDevice(@RequestBody DeviceRequest deviceRequest){
+        return new ResponseEntity<>(deviceService.createDevice(deviceRequest),HttpStatus.CREATED);
     }
 }

@@ -34,18 +34,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>3.0.3</version>
-		</dependency>
 
 		<!-- MyBatis Plus Starter -->
 		<dependency>
 			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-boot-starter</artifactId>
-			<!-- 请根据MyBatis Plus与MyBatis Spring Boot Starter 3.0.3的兼容情况选择合适的版本 -->
-			<version>3.5.2</version> <!-- 示例版本，请替换为实际兼容版本 -->
+			<artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+			<version>3.5.7</version>
 		</dependency>
 
 		<dependency>

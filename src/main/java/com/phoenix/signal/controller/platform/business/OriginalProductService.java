@@ -5,7 +5,7 @@ import com.phoenix.signal.controller.platform.model.OriginalProduct;
 
 import java.util.List;
 
-public interface OriginalProductService {
+public interface OriginalProductService{
     List<OriginalProduct> getAllOriginalProduct();
 
     String create(ProductRequest productRequest);

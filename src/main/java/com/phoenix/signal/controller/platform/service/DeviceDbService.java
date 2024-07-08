@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface DeviceDbService extends MPJBaseService<Device> {
     List<Device> getAll();
+
+    Long countByProductId(Long deviceId);
 }
