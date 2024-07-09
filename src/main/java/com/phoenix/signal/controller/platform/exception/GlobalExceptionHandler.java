@@ -24,6 +24,18 @@ public class GlobalExceptionHandler{
         return new ResponseEntity<>(errorDetail, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorDetail> handleNotFoundException(Exception e, WebRequest webRequest){
+        ErrorDetail errorDetail = new ErrorDetail(
+                "NOT_FOUND",
+                e.getMessage(),
+                webRequest.getDescription(false),
+                webRequest.getContextPath(),
+                LocalDateTime.now()
+        );
+        return  new ResponseEntity<>(errorDetail, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetail> handleGlobalException(Exception e, WebRequest webRequest) {
         ErrorDetail errorDetail = new ErrorDetail(
@@ -35,4 +47,5 @@ public class GlobalExceptionHandler{
         );
         return new ResponseEntity<>(errorDetail, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

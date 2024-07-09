@@ -13,4 +13,8 @@ public interface OriginalProductService{
     String create(ProductRequest productRequest);
 
     IPage<OriginalProduct> page(Page<OriginalProduct> page);
+
+    String update(Long productId, ProductRequest productRequest);
+
+    String delete(Long productId);
 }

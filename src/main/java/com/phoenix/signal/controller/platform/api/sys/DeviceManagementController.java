@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class DeviceManagementController {
         @Parameter(name = "size", description = "每页数量", in = ParameterIn.QUERY, example = "10")
     })
     @GetMapping("/product/page")
-    public ResponseEntity<List<OriginalProduct>> pageOriginalProduct(@RequestBody PageRequest pageRequest){
+    public ResponseEntity<List<OriginalProduct>> pageOriginalProduct(@RequestBody @Valid PageRequest pageRequest){
         Page page = new Page(pageRequest.getIndex(),pageRequest.getSize());
         return ResponseEntity.ok(originalProductService.page(page).getRecords());
     }
@@ -61,9 +62,25 @@ public class DeviceManagementController {
             @ApiResponse(responseCode = "201", description = "CREATED")
     )
     @PostMapping("/product/create")
-    public ResponseEntity<String> createProduct(@RequestBody ProductRequest productRequest){
+    public ResponseEntity<String> createProduct(@RequestBody @Valid ProductRequest productRequest){
         return new ResponseEntity<>(originalProductService.create(productRequest), HttpStatus.CREATED);
     }
+
+    @Tag(name = "产品表")
+    @Operation(summary = "修改产品")
+    @PutMapping("/product/update/{id}")
+    public ResponseEntity<String> updateProduct(@PathVariable Long id,@RequestBody @Valid ProductRequest productRequest){
+        return new ResponseEntity<>(originalProductService.update(id, productRequest), HttpStatus.OK);
+    }
+
+    @Tag(name = "产品表")
+    @Operation(summary = "删除产品")
+    @DeleteMapping("/product/delete/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable Long id){
+        return new ResponseEntity<>(originalProductService.delete(id), HttpStatus.OK);
+    }
+
+
 
 
     @Tag(name = "设备表")
@@ -82,7 +99,7 @@ public class DeviceManagementController {
             @ApiResponse(responseCode = "201", description = "CREATED")
     )
     @PostMapping("/device/create")
-    public ResponseEntity<String> createDevice(@RequestBody DeviceRequest deviceRequest){
+    public ResponseEntity<String> createDevice(@RequestBody @Valid DeviceRequest deviceRequest){
         return new ResponseEntity<>(deviceService.createDevice(deviceRequest),HttpStatus.CREATED);
     }
 }
