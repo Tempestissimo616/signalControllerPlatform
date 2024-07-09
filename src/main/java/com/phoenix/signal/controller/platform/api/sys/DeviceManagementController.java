@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phoenix.signal.controller.platform.business.DeviceService;
 import com.phoenix.signal.controller.platform.business.OriginalProductService;
 import com.phoenix.signal.controller.platform.dto.request.DeviceRequest;
+import com.phoenix.signal.controller.platform.dto.request.PageRequest;
 import com.phoenix.signal.controller.platform.dto.request.ProductRequest;
 import com.phoenix.signal.controller.platform.model.Device;
 import com.phoenix.signal.controller.platform.model.OriginalProduct;
@@ -49,7 +50,8 @@ public class DeviceManagementController {
         @Parameter(name = "size", description = "每页数量", in = ParameterIn.QUERY, example = "10")
     })
     @GetMapping("/product/page")
-    public ResponseEntity<List<OriginalProduct>> pageOriginalProduct(Page<OriginalProduct> page){
+    public ResponseEntity<List<OriginalProduct>> pageOriginalProduct(@RequestBody PageRequest pageRequest){
+        Page page = new Page(pageRequest.getIndex(),pageRequest.getSize());
         return ResponseEntity.ok(originalProductService.page(page).getRecords());
     }
 
