@@ -9,4 +9,10 @@ public interface DeviceDbService extends MPJBaseService<Device> {
     List<Device> getAll();
 
     Long countByProductId(Long deviceId);
+
+    Device getByDeviceId(Long deviceId);
+
+    Boolean updateByDeviceId(Long deviceId, Device device);
+
+    Boolean deleteByDeviceId(Long deviceId);
 }

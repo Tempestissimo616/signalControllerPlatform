@@ -102,4 +102,30 @@ public class DeviceManagementController {
     public ResponseEntity<String> createDevice(@RequestBody @Valid DeviceRequest deviceRequest){
         return new ResponseEntity<>(deviceService.createDevice(deviceRequest),HttpStatus.CREATED);
     }
+
+    @Tag(name = "设备表")
+    @Operation(summary = "分页获取设备信息")
+    @Parameters({
+            @Parameter(name = "page", description = "页码", in = ParameterIn.QUERY, example = "1"),
+            @Parameter(name = "size", description = "每页数量", in = ParameterIn.QUERY, example = "10")
+    })
+    @GetMapping("/device/page")
+    public ResponseEntity<List<OriginalProduct>> pageDevice(@RequestBody @Valid PageRequest pageRequest){
+        Page page = new Page(pageRequest.getIndex(),pageRequest.getSize());
+        return ResponseEntity.ok(deviceService.page(page).getRecords());
+    }
+
+    @Tag(name = "设备表")
+    @Operation(summary = "修改设备")
+    @PutMapping("/device/update/{id}")
+    public ResponseEntity<String> updateDevice(@PathVariable Long id,@RequestBody @Valid DeviceRequest deviceRequest){
+        return new ResponseEntity<>(deviceService.update(id, deviceRequest), HttpStatus.OK);
+    }
+
+    @Tag(name = "设备表")
+    @Operation(summary = "删除设备")
+    @DeleteMapping("/device/delete/{id}")
+    public ResponseEntity<String> deleteDevice(@PathVariable Long id){
+        return new ResponseEntity<>(deviceService.delete(id), HttpStatus.OK);
+    }
 }

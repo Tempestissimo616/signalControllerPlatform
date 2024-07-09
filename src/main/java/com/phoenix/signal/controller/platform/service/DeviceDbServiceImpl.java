@@ -23,4 +23,19 @@ public class DeviceDbServiceImpl extends MPJBaseServiceImpl<DeviceMapper, Device
     public Long countByProductId(Long deviceId) {
         return deviceMapper.selectCount(new MPJLambdaWrapper<Device>().eq(Device::getDeviceId, deviceId));
     }
+
+    @Override
+    public Device getByDeviceId(Long deviceId) {
+        return deviceMapper.selectOne(new MPJLambdaWrapper<Device>().eq(Device::getDeviceId, deviceId));
+    }
+
+    @Override
+    public Boolean updateByDeviceId(Long deviceId, Device device) {
+        return deviceMapper.update(device, new MPJLambdaWrapper<Device>().eq(Device::getDeviceId, deviceId)) > 0;
+    }
+
+    @Override
+    public Boolean deleteByDeviceId(Long deviceId) {
+        return deviceMapper .delete(new MPJLambdaWrapper<Device>().eq(Device::getDeviceId, deviceId)) > 0;
+    }
 }
