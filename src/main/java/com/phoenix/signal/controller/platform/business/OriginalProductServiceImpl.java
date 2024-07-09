@@ -1,5 +1,7 @@
 package com.phoenix.signal.controller.platform.business;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phoenix.signal.controller.platform.dto.request.ProductRequest;
 import com.phoenix.signal.controller.platform.exception.ConflictException;
 import com.phoenix.signal.controller.platform.model.OriginalProduct;
@@ -33,6 +35,11 @@ public class OriginalProductServiceImpl implements OriginalProductService{
         }
 
         return productRequest.getProductName() + "添加失败";
+    }
+
+    @Override
+    public IPage<OriginalProduct> page(Page<OriginalProduct> page) {
+        return originalProductDbService.page(page);
     }
 
     private void checkDuplicatedProduct(Long productId){

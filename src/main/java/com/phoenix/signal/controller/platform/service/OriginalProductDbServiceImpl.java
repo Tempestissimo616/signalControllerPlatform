@@ -1,5 +1,7 @@
 package com.phoenix.signal.controller.platform.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.base.MPJBaseServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.phoenix.signal.controller.platform.dto.request.ProductRequest;
@@ -33,4 +35,14 @@ public class OriginalProductDbServiceImpl extends MPJBaseServiceImpl<OriginalPro
 
         return originalProductMapper.selectCount(wrapper);
     }
+
+    @Override
+    public IPage<OriginalProduct> page(Page<OriginalProduct> page) {
+        MPJLambdaWrapper wrapper = new MPJLambdaWrapper<OriginalProduct>()
+                .selectAll(OriginalProduct.class);
+
+        return originalProductMapper.selectPage(page,wrapper);
+    }
+
+
 }

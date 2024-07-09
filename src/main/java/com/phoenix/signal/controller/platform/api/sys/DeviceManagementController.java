@@ -1,5 +1,7 @@
 package com.phoenix.signal.controller.platform.api.sys;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phoenix.signal.controller.platform.business.DeviceService;
 import com.phoenix.signal.controller.platform.business.OriginalProductService;
 import com.phoenix.signal.controller.platform.dto.request.DeviceRequest;
@@ -9,6 +11,7 @@ import com.phoenix.signal.controller.platform.model.OriginalProduct;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,6 +40,17 @@ public class DeviceManagementController {
     @GetMapping("/product/get-all")
     public ResponseEntity<List<OriginalProduct>> getAllOriginalProduct() {
         return ResponseEntity.ok(originalProductService.getAllOriginalProduct());
+    }
+
+    @Tag(name = "产品表")
+    @Operation(summary = "分页获取所有产品出厂信息")
+    @Parameters({
+        @Parameter(name = "page", description = "页码", in = ParameterIn.QUERY, example = "1"),
+        @Parameter(name = "size", description = "每页数量", in = ParameterIn.QUERY, example = "10")
+    })
+    @GetMapping("/product/page")
+    public ResponseEntity<List<OriginalProduct>> pageOriginalProduct(Page<OriginalProduct> page){
+        return ResponseEntity.ok(originalProductService.page(page).getRecords());
     }
 
     @Tag(name = "产品表")
