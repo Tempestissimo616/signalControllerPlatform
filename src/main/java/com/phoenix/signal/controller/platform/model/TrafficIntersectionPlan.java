@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Resource;
 import lombok.Data;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,16 +18,19 @@ public class TrafficIntersectionPlan {
 
     @Schema(description = "序号")
     @TableId(value = "id",type = IdType.AUTO)
-    private Long id;
+    private Long Id;
+
+    @Schema(description = "方案管理 设备ID")
+    private Long parentPlanDeviceId;
 
     @Schema(description = "方案号")
-    private Long planNumber;
+    private Integer planNumber;
 
     @Schema(description = "相位差")
-    private Long phaseDifference;
+    private Integer phaseDifference;
 
     @Schema(description = "协调阶段号 默认为0:不协调 ")
-    private Long coordinatedPhaseNumber;
+    private Integer coordinatedPhaseNumber;
 
     @Schema(description = "周期")
     private Integer period;
@@ -32,9 +38,5 @@ public class TrafficIntersectionPlan {
     @Schema(description = "备注")
     private String note;
 
-    @Schema(description = "阶段管理Id")
-    private Long planPhaseControlId;
 
-    @Schema(description = "阶段号List")
-    List<PlanPhaseControl> phaseList;
 }
