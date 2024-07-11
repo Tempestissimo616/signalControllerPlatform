@@ -37,21 +37,45 @@ CREATE TABLE t_intersection_plan(
     note VARCHAR(255) NULL
     )engine=innodb auto_increment=1;
 
+--CREATE TABLE t_phase_control(
+--    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--    parent_plan_id BIGINT NOT NULL,
+--    phase_number INT NULL,
+--    phase_duration INT NULL,
+--    green_ratio VARCHAR(255) NULL,
+--    phase_type VARCHAR(255) NULL,
+--    traffic_phase VARCHAR(255) NULL,
+--    min_green_duration INT NULL,
+--    max_green_duration INT NULL,
+--    yellow_duration INT NULL,
+--    all_red_duration INT NULL,
+--    phase_image_data BLOB NULL
+--    )engine=innodb auto_increment=1;
+
 CREATE TABLE t_phase_control(
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    parent_plan_id BIGINT NOT NULL,
-    phase_number INT NULL,
-    phase_duration INT NULL,
-    green_ratio VARCHAR(255) NULL,
-    phase_type VARCHAR(255) NULL,
-    traffic_phase VARCHAR(255) NULL,
-    min_green_duration INT NULL,
-    max_green_duration INT NULL,
-    yellow_duration INT NULL,
-    all_red_duration INT NULL,
+    device_id BIGINT NOT NULL,
+    plan_number INT NOT NULL,
+    phase_number INT NOT NULL,
+    phase_duration INT NOT NULL,
+    green_ratio VARCHAR(255) NOT NULL,
+    phase_type VARCHAR(255) NOT NULL,
+    traffic_phase VARCHAR(255) NOT NULL,
     phase_image_data BLOB NULL
     )engine=innodb auto_increment=1;
 
+CREATE TABLE t_phase_parameter(
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    device_id BIGINT NOT NULL,
+    plan_number INT NOT NULL,
+    phase_number INT NOT NULL,
+    phase_para_number INT NOT NULL,
+    phase_name VARCHAR(255) NOT NULL,
+    min_green_duration INT NOT NULL,
+    max_green_duration INT NOT NULL,
+    yellow_duration INT NOT NULL,
+    all_red_duration INT NOT NULL
+    )engine=innodb auto_increment=1;
 
 
 }
