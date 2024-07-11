@@ -19,6 +19,14 @@ public class DeviceIntersectionPlanDbServiceImpl extends MPJBaseServiceImpl<Devi
     @Override
     public List<DeviceIntersectionPlan> getAllByDeviceId(Long deviceId) {
         return deviceIntersectionPlanMapper.selectList(new MPJLambdaWrapper<DeviceIntersectionPlan>()
-                .eq(DeviceIntersectionPlan::getParentPlanDeviceId,deviceId));
+                .eq(DeviceIntersectionPlan::getParentPlanDeviceId,deviceId)
+                .orderByAsc(DeviceIntersectionPlan::getPlanNumber));
+    }
+
+    @Override
+    public DeviceIntersectionPlan getByDeviceIdAndPlanNum(Long deviceId, Integer planNum) {
+        return deviceIntersectionPlanMapper.selectOne(new MPJLambdaWrapper<DeviceIntersectionPlan>()
+                .eq(DeviceIntersectionPlan::getParentPlanDeviceId,deviceId)
+                .eq(DeviceIntersectionPlan::getPlanNumber,planNum));
     }
 }

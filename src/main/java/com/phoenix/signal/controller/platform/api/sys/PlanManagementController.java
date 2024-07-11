@@ -40,9 +40,9 @@ public class PlanManagementController {
     }
 
     @Operation(summary = "删除方案")
-    @DeleteMapping("delete/{deviceId}/{planId}")
-    public ResponseEntity<String> deletePlan(@PathVariable Long deviceId, @PathVariable Long planId){
-        return ResponseEntity.ok(planManagementService.deletePlan(deviceId, planId));
+    @DeleteMapping("delete/{deviceId}/{planNumber}")
+    public ResponseEntity<String> deletePlan(@PathVariable Long deviceId, @PathVariable Integer planNumber){
+        return ResponseEntity.ok(planManagementService.deletePlan(deviceId, planNumber));
     }
 
 }

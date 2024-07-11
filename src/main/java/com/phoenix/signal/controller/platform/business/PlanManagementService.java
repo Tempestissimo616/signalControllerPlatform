@@ -11,7 +11,7 @@ public interface PlanManagementService {
 
     String createPlan(PlanManagementRequest planManagementRequest);
 
-    String deletePlan(Long deviceId, Long planId);
+    String deletePlan(Long deviceId, Integer planNumber);
 
     String updatePlan(PlanManagementRequest planManagementRequest);
 }

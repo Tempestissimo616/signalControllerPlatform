@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface DeviceIntersectionPlanDbService extends MPJBaseService<DeviceIntersectionPlan> {
     List<DeviceIntersectionPlan> getAllByDeviceId(Long deviceId);
+
+    DeviceIntersectionPlan getByDeviceIdAndPlanNum(Long deviceId, Integer planNum);
 }
