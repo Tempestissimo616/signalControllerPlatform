@@ -19,7 +19,7 @@ CREATE TABLE t_device (
     intersection_id BIGINT NOT NULL
     )engine=innodb auto_increment=1;
 
---CREATE TABLE t_intersection_plan_management(
+--CREATE TABLE t_device_status_plan_management(
 --    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 --    sub_area VARCHAR(255) NOT NULL,
 --    device_id BIGINT NOT NULL,
