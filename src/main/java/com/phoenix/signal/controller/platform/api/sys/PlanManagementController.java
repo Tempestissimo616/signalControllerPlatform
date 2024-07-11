@@ -6,6 +6,7 @@ import com.phoenix.signal.controller.platform.dto.response.PlanManagementRespons
 import com.phoenix.signal.controller.platform.service.PlanPhaseControlDbService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,20 +22,20 @@ public class PlanManagementController {
     PlanManagementService planManagementService;
 
     @Operation(summary = "根据设备ID获取方案")
-    @GetMapping("{id}")
+    @GetMapping("{deviceId}")
     public ResponseEntity<List<PlanManagementResponse>> getPlanByDeviceId(@PathVariable Long deviceId){
         return ResponseEntity.ok(planManagementService.getPlanListByDeviceId(deviceId));
     }
 
     @Operation(summary = "创建方案")
-    @GetMapping("create")
-    public ResponseEntity<String> createPlan(@RequestBody PlanManagementRequest planManagementRequest){
+    @PostMapping("create")
+    public ResponseEntity<String> createPlan(@RequestBody @Valid PlanManagementRequest planManagementRequest){
         return ResponseEntity.ok(planManagementService.createPlan(planManagementRequest));
     }
 
     @Operation(summary = "更新方案")
     @PutMapping("update")
-    public ResponseEntity<String> updatePlan(@RequestBody PlanManagementRequest planManagementRequest){
+    public ResponseEntity<String> updatePlan(@RequestBody @Valid PlanManagementRequest planManagementRequest){
         return ResponseEntity.ok(planManagementService.updatePlan(planManagementRequest));
     }
 

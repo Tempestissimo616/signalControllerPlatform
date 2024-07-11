@@ -30,7 +30,7 @@ public class PlanManagementServiceImpl implements PlanManagementService{
     @Override
     public List<PlanManagementResponse> getPlanListByDeviceId(Long deviceId) {
 
-        List<DeviceIntersectionPlan> planList = deviceIntersectionPlanDbService.listByDeviceId(deviceId);
+        List<DeviceIntersectionPlan> planList = deviceIntersectionPlanDbService.getAllByDeviceId(deviceId);
 
         List<PlanManagementResponse> responsesList = planList.stream()
                 .map(devicePlan -> modelMapper.map(devicePlan,PlanManagementResponse.class))
