@@ -1,7 +1,5 @@
-package com.phoenix.signal.controller.platform.dto.response;
+package com.phoenix.signal.controller.platform.dto.request;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,8 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PhaseControlResponse {
-
+public class PhaseControllRequest {
     @Schema(description = "设备ID")
     Long deviceId;
 
@@ -34,5 +31,4 @@ public class PhaseControlResponse {
 
     @Schema(description = "通行相位")
     String trafficPhase;
-
 }
