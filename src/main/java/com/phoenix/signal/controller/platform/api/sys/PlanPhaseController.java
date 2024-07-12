@@ -2,10 +2,11 @@ package com.phoenix.signal.controller.platform.api.sys;
 
 import com.phoenix.signal.controller.platform.business.PlanPhaseService;
 import com.phoenix.signal.controller.platform.business.PlanPhaseServiceImpl;
-import com.phoenix.signal.controller.platform.dto.request.PhaseControllRequest;
+import com.phoenix.signal.controller.platform.dto.request.PhaseControlRequest;
 import com.phoenix.signal.controller.platform.dto.response.PhaseControlResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,14 +29,14 @@ public class PlanPhaseController {
 
     @Operation(summary = "创建方案阶段")
     @PostMapping("/create")
-    public ResponseEntity<String> createPhase(PhaseControllRequest phaseControllRequestList) {
-        return ResponseEntity.ok(planPhaseService.createPhase(phaseControllRequestList));
+    public ResponseEntity<String> createPhase(@RequestBody @Valid PhaseControlRequest phaseControlRequest) {
+        return ResponseEntity.ok(planPhaseService.createPhase(phaseControlRequest));
     }
 
     @Operation(summary = "更新方案阶段")
     @PutMapping("/update")
-    public ResponseEntity<String> updatePhase(PhaseControllRequest phaseControllRequest) {
-        return ResponseEntity.ok(planPhaseService.updatePhase(phaseControllRequest));
+    public ResponseEntity<String> updatePhase(@RequestBody @Valid PhaseControlRequest phaseControlRequest) {
+        return ResponseEntity.ok(planPhaseService.updatePhase(phaseControlRequest));
     }
 
     @Operation(summary = "删除方案阶段")

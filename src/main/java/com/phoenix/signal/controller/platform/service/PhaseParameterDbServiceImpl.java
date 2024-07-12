@@ -10,5 +10,5 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class PhaseParameterDbServiceImpl extends MPJBaseServiceImpl<PhaseParameterMapper, PhaseParameter> implements PhaseParameterDbService{
 
-    PhaseParameterDbService phaseParameterDbService;
+    PhaseParameterMapper phaseParameterMapper;
 }

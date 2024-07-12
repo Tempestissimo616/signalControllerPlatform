@@ -1,6 +1,6 @@
 package com.phoenix.signal.controller.platform.business;
 
-import com.phoenix.signal.controller.platform.dto.request.PhaseControllRequest;
+import com.phoenix.signal.controller.platform.dto.request.PhaseControlRequest;
 import com.phoenix.signal.controller.platform.dto.response.PhaseControlResponse;
 import com.phoenix.signal.controller.platform.exception.ConflictException;
 import com.phoenix.signal.controller.platform.exception.NotFoundException;
@@ -32,31 +32,26 @@ public class PlanPhaseServiceImpl implements PlanPhaseService{
     }
 
     @Override
-    public String createPhase(PhaseControllRequest phaseControllRequest) {
-        checkPlanPhaseControlNotExists(phaseControllRequest);
-        checkPlanPhaseControlPhaseNumberNotExists(phaseControllRequest);
+    public String createPhase(PhaseControlRequest phaseControlRequest) {
+        checkPlanPhaseControlExists(phaseControlRequest);
+        checkPlanPhaseControlPhaseNumberNotExists(phaseControlRequest);
 
-        PlanPhaseControl planPhaseControl = modelMapper.map(phaseControllRequest, PlanPhaseControl.class);
-        // 防止误传递
-        planPhaseControl.setId(null);
+        PlanPhaseControl planPhaseControl = new PlanPhaseControl();
+        convertDtoToPlanPhaseControl(phaseControlRequest,planPhaseControl);
         return planPhaseControlDbService.save(planPhaseControl) ? String.format("设备Id%s方案号%s阶段号%s:创建成功",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber())
                 : String.format("设备Id%s方案号%s阶段号%s:创建失败",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber());
     }
 
     @Override
-    public String updatePhase(PhaseControllRequest phaseControllRequest) {
-        PlanPhaseControl planPhaseControl = planPhaseControlDbService.getByDeviceIdPlanNumPhaseNum(phaseControllRequest.getDeviceId(),phaseControllRequest.getPlanNumber(),phaseControllRequest.getPhaseNumber());
+    public String updatePhase(PhaseControlRequest phaseControlRequest) {
+        PlanPhaseControl planPhaseControl = planPhaseControlDbService.getByDeviceIdPlanNumPhaseNum(phaseControlRequest.getDeviceId(),phaseControlRequest.getPlanNumber(),phaseControlRequest.getPhaseNumber());
         if(planPhaseControl == null){
             throw new NotFoundException(ExceptionEnum.NOT_FOUND);
         }
 
-        Long id = planPhaseControl.getId();
-        Long deviceId = planPhaseControl.getDeviceId();
-        modelMapper.map(phaseControllRequest,planPhaseControl);
-        planPhaseControl.setId(id);
-        planPhaseControl.setDeviceId(deviceId);
+        convertDtoToPlanPhaseControl(phaseControlRequest,planPhaseControl);
 
-        return planPhaseControlDbService.save(planPhaseControl) ? String.format("设备Id%s方案号%s阶段号%s:创建成功",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber())
+        return planPhaseControlDbService.updateById(planPhaseControl) ? String.format("设备Id%s方案号%s阶段号%s:创建成功",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber())
                 : String.format("设备Id%s方案号%s阶段号%s:创建失败",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber());
     }
     @Override
@@ -69,18 +64,28 @@ public class PlanPhaseServiceImpl implements PlanPhaseService{
                 : String.format("设备Id%s方案号%s阶段号%s:删除失败",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber());
     }
 
-    private void checkPlanPhaseControlNotExists(PhaseControllRequest phaseControllRequest) {
-        if(deviceIntersectionPlanDbService.getByDeviceIdAndPlanNum(phaseControllRequest.getDeviceId(),phaseControllRequest.getPlanNumber())
+    private void checkPlanPhaseControlExists(PhaseControlRequest phaseControlRequest) {
+        if(deviceIntersectionPlanDbService.getByDeviceIdAndPlanNum(phaseControlRequest.getDeviceId(),phaseControlRequest.getPlanNumber())
             == null){
+            throw new NotFoundException(ExceptionEnum.NOT_FOUND);
+        }
+    }
+
+    private void checkPlanPhaseControlPhaseNumberNotExists(PhaseControlRequest phaseControlRequest) {
+        if(planPhaseControlDbService.getByDeviceIdPlanNumPhaseNum(phaseControlRequest.getDeviceId(),phaseControlRequest.getPlanNumber(),phaseControlRequest.getPhaseNumber())
+                != null){
             throw new ConflictException(ExceptionEnum.CONFLICT_EXCEPTION);
         }
     }
 
-    private void checkPlanPhaseControlPhaseNumberNotExists(PhaseControllRequest phaseControllRequest) {
-        if(planPhaseControlDbService.getByDeviceIdPlanNumPhaseNum(phaseControllRequest.getDeviceId(),phaseControllRequest.getPlanNumber(),phaseControllRequest.getPhaseNumber())
-                == null){
-            throw new ConflictException(ExceptionEnum.CONFLICT_EXCEPTION);
-        }
+    private void convertDtoToPlanPhaseControl(PhaseControlRequest phaseControlRequest, PlanPhaseControl planPhaseControl){
+        planPhaseControl.setDeviceId(phaseControlRequest.getDeviceId());
+        planPhaseControl.setPlanNumber(phaseControlRequest.getPlanNumber());
+        planPhaseControl.setPhaseNumber(phaseControlRequest.getPhaseNumber());
+        planPhaseControl.setGreenRatio(phaseControlRequest.getGreenRatio());
+        planPhaseControl.setPhaseType(phaseControlRequest.getPhaseType());
+        planPhaseControl.setPhaseDuration(phaseControlRequest.getPhaseDuration());
+        planPhaseControl.setTrafficPhase(phaseControlRequest.getTrafficPhase());
     }
 }
 

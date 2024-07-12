@@ -28,7 +28,6 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/device-management")
-@Tag(name = "设备管理", description = "设备数据库相关的api")
 public class DeviceManagementController {
 
     OriginalProductService originalProductService;
