@@ -3,8 +3,10 @@ package com.phoenix.signal.controller.platform.api.sys;
 import com.phoenix.signal.controller.platform.business.PlanPhaseService;
 import com.phoenix.signal.controller.platform.business.PlanPhaseServiceImpl;
 import com.phoenix.signal.controller.platform.dto.request.PhaseControlRequest;
+import com.phoenix.signal.controller.platform.dto.request.PhaseParaRequest;
 import com.phoenix.signal.controller.platform.dto.request.image.PhaseControlImageRequest;
 import com.phoenix.signal.controller.platform.dto.response.PhaseControlResponse;
+import com.phoenix.signal.controller.platform.dto.response.PhaseParaResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -74,6 +76,32 @@ public class PlanPhaseController {
     @DeleteMapping("/image/delete/{deviceId}/{planNumber}/{phaseNumber}")
     public ResponseEntity<String> removePhaseImageData(@PathVariable Long deviceId,@PathVariable Integer planNumber,@PathVariable Integer phaseNumber) throws IOException {
         return ResponseEntity.ok(planPhaseService.removePhaseImageData(deviceId,planNumber,phaseNumber));
+    }
+
+
+
+    @Operation(summary = "获取方案相位参数")
+    @GetMapping("/para")
+    public ResponseEntity<List<PhaseParaResponse>> getPhaseParas(@RequestBody @Valid PhaseParaRequest phaseParaRequest){
+        return ResponseEntity.ok(planPhaseService.getPhaseParas(phaseParaRequest));
+    }
+
+    @Operation(summary = "创建方案相位参数")
+    @PostMapping("/para/create")
+    public ResponseEntity<String> createPhasePara(@RequestBody @Valid PhaseParaRequest phaseParaRequest){
+        return ResponseEntity.ok(planPhaseService.createPhasePara(phaseParaRequest));
+    }
+
+    @Operation(summary = "更新方案相位参数")
+    @PutMapping("/para/update")
+    public ResponseEntity<String> updatePhasePara(@RequestBody @Valid PhaseParaRequest phaseParaRequest){
+        return ResponseEntity.ok(planPhaseService.updatePhasePara(phaseParaRequest));
+    }
+
+    @Operation(summary = "删除方案相位参数")
+    @DeleteMapping("/para/delete/")
+    public ResponseEntity<String> deletePhasePara(@RequestBody @Valid PhaseParaRequest phaseParaRequest){
+        return ResponseEntity.ok(planPhaseService.deletePhasePara(phaseParaRequest));
     }
 
 

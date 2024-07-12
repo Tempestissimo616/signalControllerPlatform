@@ -1,10 +1,13 @@
 package com.phoenix.signal.controller.platform.business;
 
 import com.phoenix.signal.controller.platform.dto.request.PhaseControlRequest;
+import com.phoenix.signal.controller.platform.dto.request.PhaseParaRequest;
 import com.phoenix.signal.controller.platform.dto.request.image.PhaseControlImageRequest;
 import com.phoenix.signal.controller.platform.dto.response.PhaseControlResponse;
+import com.phoenix.signal.controller.platform.dto.response.PhaseParaResponse;
 import com.phoenix.signal.controller.platform.exception.ConflictException;
 import com.phoenix.signal.controller.platform.exception.NotFoundException;
+import com.phoenix.signal.controller.platform.model.PhaseParameter;
 import com.phoenix.signal.controller.platform.model.PlanPhaseControl;
 import com.phoenix.signal.controller.platform.service.DeviceIntersectionPlanDbService;
 import com.phoenix.signal.controller.platform.service.PhaseParameterDbService;
@@ -92,6 +95,49 @@ public class PlanPhaseServiceImpl implements PlanPhaseService{
         phaseControlImageRequest.setPlanNumber(planNumber);
         phaseControlImageRequest.setPhaseNumber(phaseNumber);
         return updatePhaseImageData(phaseControlImageRequest);
+    }
+
+
+
+    @Override
+    public List<PhaseParaResponse> getPhaseParas(PhaseParaRequest phaseParaRequest) {
+        List<PhaseParameter> phaseParameterList = phaseParameterDbService.getAllParasByPlan(phaseParaRequest);
+        return phaseParameterList.stream().map(phaseParameter -> modelMapper.map(phaseParameter, PhaseParaResponse.class)).toList();
+    }
+
+    @Override
+    public String createPhasePara(PhaseParaRequest phaseParaRequest) {
+        if(planPhaseControlDbService.getByDeviceIdPlanNumPhaseNum(phaseParaRequest.getDeviceId(),phaseParaRequest.getPlanNumber(),phaseParaRequest.getPhaseNumber()) == null)
+            throw new NotFoundException(ExceptionEnum.NOT_FOUND);
+        if(phaseParameterDbService.getByPlan(phaseParaRequest.getDeviceId(),phaseParaRequest.getPlanNumber(),phaseParaRequest.getPhaseNumber(),phaseParaRequest.getPhaseParaNumber()) != null)
+            throw new ConflictException(ExceptionEnum.CONFLICT_EXCEPTION);
+
+        PhaseParameter phaseParameter = new PhaseParameter();
+        Long deviceId = phaseParaRequest.getDeviceId();
+        modelMapper.map(phaseParaRequest,phaseParameter);
+        phaseParameter.setDeviceId(deviceId);
+        phaseParameter.setId(null);
+        return phaseParameterDbService.save(phaseParameter) ? "相位创建成功" : "相位创建失败";
+    }
+
+    @Override
+    public String updatePhasePara(PhaseParaRequest phaseParaRequest) {
+        PhaseParameter phaseParameter = phaseParameterDbService.getByPlan(phaseParaRequest.getDeviceId(),phaseParaRequest.getPlanNumber(),phaseParaRequest.getPhaseNumber(),phaseParaRequest.getPhaseParaNumber());
+        if(phaseParameter == null) throw new NotFoundException(ExceptionEnum.NOT_FOUND);
+
+        Long id = phaseParameter.getId();
+        Long deviceId = phaseParaRequest.getDeviceId();
+        modelMapper.map(phaseParaRequest,phaseParameter);
+        phaseParameter.setId(id);
+        phaseParameter.setDeviceId(deviceId);
+        return phaseParameterDbService.updateById(phaseParameter) ? "相位修改成功" : "相位创建失败";
+    }
+
+    @Override
+    public String deletePhasePara(PhaseParaRequest phaseParaRequest) {
+        PhaseParameter phaseParameter = phaseParameterDbService.getByPlan(phaseParaRequest.getDeviceId(),phaseParaRequest.getPlanNumber(),phaseParaRequest.getPhaseNumber(),phaseParaRequest.getPhaseParaNumber());
+        if(phaseParameter == null) throw new NotFoundException(ExceptionEnum.NOT_FOUND);
+        return phaseParameterDbService.removeById(phaseParameter) ? "相位删除成功" : "相位删除失败";
     }
 
     private void checkPlanPhaseControlExists(PhaseControlRequest phaseControlRequest) {
