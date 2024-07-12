@@ -1,6 +1,7 @@
 package com.phoenix.signal.controller.platform.business;
 
 import com.phoenix.signal.controller.platform.dto.request.PhaseControlRequest;
+import com.phoenix.signal.controller.platform.dto.request.image.PhaseControlImageRequest;
 import com.phoenix.signal.controller.platform.dto.response.PhaseControlResponse;
 import com.phoenix.signal.controller.platform.exception.ConflictException;
 import com.phoenix.signal.controller.platform.exception.NotFoundException;
@@ -13,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -64,6 +66,34 @@ public class PlanPhaseServiceImpl implements PlanPhaseService{
                 : String.format("设备Id%s方案号%s阶段号%s:删除失败",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber());
     }
 
+    @Override
+    public byte[] getPhaseImageData(Long deviceId, Integer planNumber, Integer phaseNumber) {
+        return planPhaseControlDbService.getByDeviceIdPlanNumPhaseNum(deviceId,planNumber,phaseNumber).getPhaseImageData();
+    }
+
+    @Override
+    public String updatePhaseImageData(PhaseControlImageRequest phaseControlImageRequest) throws IOException {
+        PlanPhaseControl planPhaseControl = planPhaseControlDbService.getByDeviceIdPlanNumPhaseNum(phaseControlImageRequest.getDeviceId(),phaseControlImageRequest.getPlanNumber(),phaseControlImageRequest.getPhaseNumber());
+        if(phaseControlImageRequest.getImage() != null) {
+            planPhaseControl.setPhaseImageData(phaseControlImageRequest.getImage().getBytes());
+        }else{
+            planPhaseControl.setPhaseImageData(null);
+        }
+
+        return planPhaseControlDbService.updateById(planPhaseControl) ? String.format("设备Id%s方案号%s阶段号%s:图片修改成功",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber())
+                : String.format("设备Id%s方案号%s阶段号%s:图片修改失败",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber());
+    }
+
+    @Override
+    public String removePhaseImageData(Long deviceId, Integer planNumber, Integer phaseNumber) throws IOException {
+        PhaseControlImageRequest phaseControlImageRequest = new PhaseControlImageRequest();
+        phaseControlImageRequest.setImage(null);
+        phaseControlImageRequest.setDeviceId(deviceId);
+        phaseControlImageRequest.setPlanNumber(planNumber);
+        phaseControlImageRequest.setPhaseNumber(phaseNumber);
+        return updatePhaseImageData(phaseControlImageRequest);
+    }
+
     private void checkPlanPhaseControlExists(PhaseControlRequest phaseControlRequest) {
         if(deviceIntersectionPlanDbService.getByDeviceIdAndPlanNum(phaseControlRequest.getDeviceId(),phaseControlRequest.getPlanNumber())
             == null){
@@ -77,6 +107,7 @@ public class PlanPhaseServiceImpl implements PlanPhaseService{
             throw new ConflictException(ExceptionEnum.CONFLICT_EXCEPTION);
         }
     }
+
 
     private void convertDtoToPlanPhaseControl(PhaseControlRequest phaseControlRequest, PlanPhaseControl planPhaseControl){
         planPhaseControl.setDeviceId(phaseControlRequest.getDeviceId());
