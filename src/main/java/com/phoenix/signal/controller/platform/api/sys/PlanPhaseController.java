@@ -99,7 +99,7 @@ public class PlanPhaseController {
     }
 
     @Operation(summary = "删除方案相位参数")
-    @DeleteMapping("/para/delete/")
+    @DeleteMapping("/para/delete")
     public ResponseEntity<String> deletePhasePara(@RequestBody @Valid PhaseParaRequest phaseParaRequest){
         return ResponseEntity.ok(planPhaseService.deletePhasePara(phaseParaRequest));
     }

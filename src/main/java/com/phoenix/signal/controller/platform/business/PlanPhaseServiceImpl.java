@@ -77,10 +77,12 @@ public class PlanPhaseServiceImpl implements PlanPhaseService{
     @Override
     public String updatePhaseImageData(PhaseControlImageRequest phaseControlImageRequest) throws IOException {
         PlanPhaseControl planPhaseControl = planPhaseControlDbService.getByDeviceIdPlanNumPhaseNum(phaseControlImageRequest.getDeviceId(),phaseControlImageRequest.getPlanNumber(),phaseControlImageRequest.getPhaseNumber());
-        if(phaseControlImageRequest.getImage() != null) {
+        if(planPhaseControl == null){
+            throw new NotFoundException(ExceptionEnum.NOT_FOUND);
+        }else if(phaseControlImageRequest.getImage() != null) {
             planPhaseControl.setPhaseImageData(phaseControlImageRequest.getImage().getBytes());
         }else{
-            planPhaseControl.setPhaseImageData(null);
+            planPhaseControl.setPhaseImageData(new byte[0]);
         }
 
         return planPhaseControlDbService.updateById(planPhaseControl) ? String.format("设备Id%s方案号%s阶段号%s:图片修改成功",planPhaseControl.getDeviceId(),planPhaseControl.getPlanNumber(),planPhaseControl.getPhaseNumber())
