@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Primary;
 @Data
 @Schema(description = "设备产品库")
 @TableName("t_original_product")
-public class OriginalProduct extends BasicModel {
+public class OriginalProduct {
 
     @Schema(description = "产品名称")
     @TableField("product_name")

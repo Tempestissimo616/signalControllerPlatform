@@ -77,5 +77,35 @@ CREATE TABLE t_phase_parameter(
     all_red_duration INT NOT NULL
     )engine=innodb auto_increment=1;
 
+CREATE TABLE t_intersection (
+    id BIGINT(20) NOT NULL COMMENT '主键ID',
+    intersection_name VARCHAR(255) NOT NULL COMMENT '路口名称',
+    intersection_type VARCHAR(255) NOT NULL COMMENT '路口类型',
+    longitude DECIMAL(10, 8) NOT NULL COMMENT '经度',
+    latitude DECIMAL(10, 8) NOT NULL COMMENT '纬度',
+    administrative_region VARCHAR(255) NOT NULL COMMENT '行政区域',
+    intersection_level INT NOT NULL COMMENT '路口等级',
+    created_by BIGINT(20) NOT NULL COMMENT '创建人',
+    updated_by BIGINT(20) DEFAULT NULL COMMENT '更新人',
+    created_time DATETIME NOT NULL COMMENT '创建时间',
+    updated_time DATETIME DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='路口信息表';
+
+INSERT INTO t_intersection (
+    id,
+    intersection_name,
+    intersection_type,
+    longitude,
+    latitude,
+    administrative_region,
+    intersection_level,
+    created_by,
+    created_time
+) VALUES (
+    1234567890123456789, 'First Street & Main Avenue', 'Urban', 34.052235, -118.243683, 'Los Angeles, CA', 5, 1001, '2024-07-19 12:00:00'
+), (
+    9876543210987654321, 'Second Street & Market Road', 'Suburban', 37.7749, -122.4194, 'San Francisco, CA', 4, 1002, '2024-07-19 12:01:00'
+);
 
 }

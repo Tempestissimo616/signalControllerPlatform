@@ -16,8 +16,8 @@ public class Device {
     @TableId(value = "id",type = IdType.AUTO)
     Long id;
 
-        @Schema(description = "设备名称")
-        String deviceName;
+    @Schema(description = "设备名称")
+    String deviceName;
 
     @Schema(description = "设备ID")
     Long deviceId;
