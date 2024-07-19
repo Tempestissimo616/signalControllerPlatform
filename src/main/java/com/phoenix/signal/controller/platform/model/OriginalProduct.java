@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.phoenix.signal.controller.platform.utils.baseModel.BasicModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.context.annotation.Primary;
@@ -12,13 +13,13 @@ import org.springframework.context.annotation.Primary;
 @Data
 @Schema(description = "设备产品库")
 @TableName("t_original_product")
-public class OriginalProduct {
+public class OriginalProduct extends BasicModel {
 
     @Schema(description = "产品名称")
     @TableField("product_name")
     private String productName;
 
-    @Schema(description = "产品ID")
+    @Schema(description = "产品编码")
     @TableId(value = "product_id",type = IdType.INPUT)
     private Long productId;
 
