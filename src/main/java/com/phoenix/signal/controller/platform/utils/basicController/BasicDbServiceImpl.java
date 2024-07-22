@@ -24,7 +24,6 @@ public abstract class BasicDbServiceImpl<M extends BasicMapper<T>, T extends Bas
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         clazz = (Class<T>) pt.getActualTypeArguments()[1];
         this.baseMapper = baseMapper;
-
     }
 
     @Override
