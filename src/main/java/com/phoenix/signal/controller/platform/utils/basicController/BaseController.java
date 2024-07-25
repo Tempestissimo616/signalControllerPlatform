@@ -1,5 +1,7 @@
 package com.phoenix.signal.controller.platform.utils.basicController;
 
+import com.phoenix.signal.controller.platform.type.SysLogType;
+import com.phoenix.signal.controller.platform.utils.aop.Log;
 import com.phoenix.signal.controller.platform.utils.baseModel.BasicModel;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ public abstract class BaseController<T extends BasicModel, Service extends Basic
     protected Service service;
 
     @Operation(summary = "获取所有数据")
+    @Log(value = "%s-获取所有数据",type = SysLogType.LIST)
     @GetMapping("/list")
     public ResponseEntity<List<T>> getAll(){
         return ResponseEntity.ok(service.getAll());

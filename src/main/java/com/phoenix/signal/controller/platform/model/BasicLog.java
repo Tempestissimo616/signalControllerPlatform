@@ -106,16 +106,4 @@ public class BasicLog extends BasicStandardModel {
     public Boolean getResponseSuccess() {
         return Objects.isNull(responseSuccess) ? Boolean.FALSE : responseSuccess;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }

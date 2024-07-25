@@ -1,5 +1,7 @@
 package com.phoenix.signal.controller.platform.utils.aop;
 
+import com.phoenix.signal.controller.platform.type.SysLogType;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -16,5 +18,5 @@ public @interface Log {
     /**
      * 日志类型
      */
-    String type() default "";
+    SysLogType type() default SysLogType.OTHER;
 }
