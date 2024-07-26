@@ -2,6 +2,7 @@ package com.phoenix.signal.controller.platform.utils.aop;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import com.phoenix.signal.controller.platform.model.BasicLog;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -75,7 +76,7 @@ public class LogAop {
         }
 
         String requestLog = basicLog.getRequestMethod() + "," + basicLog.getRequestUrl() + "," + basicLog.getContentType() + ",isRequestBody:" + basicLog.getJsonRequestBody() + "," + basicLog.getRequestParam();
-        LOGGER.info(requestLog);
+        LOGGER.info(StrUtil.format("---Request Info--- : {}", requestLog));
 
 
     }
