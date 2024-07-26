@@ -1,5 +1,6 @@
 package com.phoenix.signal.controller.platform.business;
 
+import com.phoenix.signal.controller.platform.dto.request.IntersectionRequest;
 import com.phoenix.signal.controller.platform.model.Intersection;
 import com.phoenix.signal.controller.platform.service.IntersectionDbService;
 import com.phoenix.signal.controller.platform.utils.basicController.BasicServiceImpl;
@@ -8,6 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class IntersectionServiceImpl extends BasicServiceImpl<Intersection, IntersectionDbService> implements IntersectionService {
+public class IntersectionServiceImpl extends BasicServiceImpl<Intersection, IntersectionDbService, IntersectionRequest> implements IntersectionService {
 
 }
