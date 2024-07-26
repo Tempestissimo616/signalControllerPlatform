@@ -1,5 +1,7 @@
 package com.phoenix.signal.controller.platform.utils.aop;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.NumberUtil;
 import com.phoenix.signal.controller.platform.model.BasicLog;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,6 +34,7 @@ import java.util.stream.Collectors;
 public class LogAop {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogAop.class);
     private static final ThreadLocal<BasicLog> logThreadLocal = new ThreadLocal<>();
+    private static final boolean isPrintingLog = true;
 
     @Pointcut("@annotation(com.phoenix.signal.controller.platform.utils.aop.Log)")
     public void logPointCut(){}
@@ -58,10 +62,24 @@ public class LogAop {
         basicLog.setLogType(log.type());
         basicLog.setRequestMethod(request.getMethod());
         String requestBodyString = handleRequestParam(request,method,basicLog);
+        basicLog.setClassName(method.getDeclaringClass().getName());
+        basicLog.setMethodName(method.getName());
+        basicLog.setReferer(request.getHeader("Referer"));
+        basicLog.setUserAgent(request.getHeader("User-Agent"));
+        String origin = request.getHeader("Origin");
 
-        //isHandleLog
-        LOGGER.info("url={},method={},ip={},class_method={},args={}", request.getRequestURI(),request.getMethod(),request.getRemoteAddr(),joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName(),joinPoint.getArgs());
+        if(StringUtils.isNotBlank(origin) && origin.contains("swagger-ui")){
+            basicLog.setOrigin("swagger-ui");
+        }else{
+            basicLog.setOrigin(origin);
+        }
+
+        String requestLog = basicLog.getRequestMethod() + "," + basicLog.getRequestUrl() + "," + basicLog.getContentType() + ",isRequestBody:" + basicLog.getJsonRequestBody() + "," + basicLog.getRequestParam();
+        LOGGER.info(requestLog);
+
+
     }
+   //可改成around
 
     @AfterReturning("logPointCut()")
     public void doAfter(JoinPoint joinPoint){
@@ -73,6 +91,33 @@ public class LogAop {
             value = log.value();
         }
         LOGGER.info(new Date()+"-----"+ log.type().getDesc() +"-----"+value);
+
+        BasicLog basicLog = logThreadLocal.get();
+        logThreadLocal.remove();
+
+        basicLog.setResponseSuccess(Boolean.TRUE);
+        LocalDateTime requestTime = basicLog.getCreatedTime();
+        Long startTimeMs = LocalDateTimeUtil.toEpochMilli(requestTime);
+        Long endTimeMs = LocalDateTimeUtil.toEpochMilli(LocalDateTime.now());
+        Long timeDiff = endTimeMs - startTimeMs;
+        String diffStr;
+        if(timeDiff >= 1000){
+            BigDecimal secondDiff = NumberUtil.div(new BigDecimal(timeDiff), 1000, 2);
+            diffStr = secondDiff + "s";
+        }else{
+            diffStr = timeDiff + "ms";
+        }
+
+        basicLog.setDiffTimeDesc(diffStr);
+        basicLog.setDiffTime(timeDiff);
+        basicLog.setResponseTime(endTimeMs);
+
+        //logService saveLog
+
+        //可添加LogService 把信息储存到数据库
+
+        // 打印请求日志
+        printLog(basicLog);
     }
 
 
@@ -91,6 +136,7 @@ public class LogAop {
         }
         return requestBodyString;
     }
+
 
     private String handleRequestParam(HttpServletRequest request, BasicLog basicLog, boolean isRequestBody){
         String requestBodyString = null;
@@ -114,16 +160,17 @@ public class LogAop {
                     .collect(Collectors.joining(", ", "{", "}"));
         }
 
-        String requestParam = null;
+
+        String requestInfo = null;
         if (StringUtils.isNotBlank(requestBodyString) && StringUtils.isNotBlank(parameterMapString)) {
-            requestParam = "paramMap:" + parameterMapString + ",requestBody:" + requestBodyString;
+            requestInfo = "paramMap:" + parameterMapString + ",requestBody:" + requestBodyString;
         } else if (StringUtils.isNotBlank(requestBodyString)) {
-            requestParam = requestBodyString;
+            requestInfo = requestBodyString;
         } else if (StringUtils.isNotBlank(parameterMapString)) {
-            requestParam = parameterMapString;
+            requestInfo = parameterMapString;
         }
         // 请求参数
-        basicLog.setRequestParam(requestParam);
+        basicLog.setRequestParam(requestInfo);
         return requestBodyString;
     }
 
@@ -139,6 +186,15 @@ public class LogAop {
                         return true;
                     }
                 }
+            }
+        }
+        return false;
+    }
+
+    private void printLog(BasicLog basicLog){
+        if(isPrintingLog){
+            if(basicLog != null){
+                LOGGER.info(basicLog.toString());
             }
         }
     }

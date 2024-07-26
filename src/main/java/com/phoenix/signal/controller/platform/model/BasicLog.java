@@ -65,7 +65,7 @@ public class BasicLog extends BasicStandardModel {
     private SysLogType logType;
 
     @Schema(description = "响应时间")
-    private LocalDateTime responseTime;
+    private Long responseTime;
 
     @Schema(description = "0:失败,1:成功")
     private Boolean responseSuccess;
@@ -96,6 +96,9 @@ public class BasicLog extends BasicStandardModel {
 
     @Schema(description = "用户环境")
     private String userAgent;
+
+    @Schema(description = "请求来源服务名")
+    private String origin;
 
     @Schema(description = "浏览器")
     private String browser;
